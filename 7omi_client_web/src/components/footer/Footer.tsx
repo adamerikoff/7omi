@@ -11,25 +11,12 @@ function Footer() {
             <h5 className="uppercase mb-6 font-bold">Links</h5>
             <ul className="mb-4">
               <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">FAQ</a>
+                <Link to="/home" className="hover:underline text-gray-600 hover:text-orange-500">FAQ</Link>
               </li>
               <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Help</a>
+                <Link to="/home" className="hover:underline text-gray-600 hover:text-orange-500">Home</Link>
               </li>
-              <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Support</a>
-              </li>
-            </ul>
-          </div>
-          <div className="w-full md:w-1/4 text-center md:text-left">
-            <h5 className="uppercase mb-6 font-bold">Legal</h5>
-            <ul className="mb-4">
-              <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Terms</a>
-              </li>
-              <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Privacy</a>
-              </li>
+              
             </ul>
           </div>
           <div className="w-full md:w-1/4 text-center md:text-left">
@@ -42,7 +29,7 @@ function Footer() {
                 <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Linkedin</a>
               </li>
               <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Twitter</a>
+                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">GitHub</a>
               </li>
             </ul>
           </div>
@@ -53,10 +40,10 @@ function Footer() {
                 <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Official Blog</a>
               </li>
               <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">About Us</a>
+                <Link to="/about" className="hover:underline text-gray-600 hover:text-orange-500">About Us</Link>
               </li>
               <li className="mt-2">
-                <a href="#" className="hover:underline text-gray-600 hover:text-orange-500">Contact</a>
+                <Link to="/contacts" className="hover:underline text-gray-600 hover:text-orange-500">Contacts</Link>
               </li>
             </ul>
           </div>
