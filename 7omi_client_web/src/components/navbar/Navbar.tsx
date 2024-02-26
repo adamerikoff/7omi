@@ -9,7 +9,7 @@ function Navbar() {
         <a className="font-bold text-2xl lg:text-4xl text-white" href="#">
           7omi
         </a>
-        <div className="hidden lg:block">
+        <div className="lg:block">
           <ul className="flex">
             <li className="mr-4">
               <Link to="/" className="text-white">Home</Link>
