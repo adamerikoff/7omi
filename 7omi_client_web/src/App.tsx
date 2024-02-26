@@ -7,7 +7,7 @@ import Footer from './components/footer/Footer'
 
 import Home from './components/home/Home'
 
-import Chat from './components/chat/Chat'
+import ChatLayout from './components/chat/ChatLayout'
 
 import Login from './components/login/Login'
 import Signup from './components/signup/Signup'
@@ -27,7 +27,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/about" element={<About />} />
         <Route path="/contacts" element={<Contacts />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat" element={<ChatLayout />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer/>
