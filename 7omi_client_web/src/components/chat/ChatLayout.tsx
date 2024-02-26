@@ -4,7 +4,7 @@ import ContactList from "./contact_list/ContactList"
 
 function ChatLayout() {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <ContactList />
       <ChatWindow />
     </div>

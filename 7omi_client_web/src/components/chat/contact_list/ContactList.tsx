@@ -10,7 +10,7 @@ function ContactList() {
   ];
 
   return (
-    <div className="w-64  h-full">
+    <div className="w-1/4 bg-gray-200 text-white p-4 h-full border-r border-gray-700">
       <div className="">
         <h1 className="text-white text-xl font-bold">searchbar</h1>
         <ul>
