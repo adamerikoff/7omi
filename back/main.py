@@ -1,21 +1,12 @@
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from .routers import users_router
 
-from pydantic import BaseModel
-
-from datetime import timedelta, datetime
-
-from jose import JWTError, jwt
-
-from passlib.context import CryptContext
-
-
-SECRET_KEY = "1"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MIN = 30
+from fastapi import FastAPI 
 
 app = FastAPI()
 
+
+app.include_router(users_router.router)
+
 @app.get("/")
-async def test():
-  return "hi"
+async def root():
+  return "Home"
