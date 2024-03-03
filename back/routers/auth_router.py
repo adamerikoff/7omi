@@ -9,14 +9,13 @@ router = APIRouter(
 )
 
 
+@router.post("/token")
+async def login():
+    
+    return "access token"
 
-# @router.get("/")
-# async def read_items():
-#     return fake_items_db
+@router.post("/refresh_token")
+async def read_items():
+    return "refreshed"
 
 
-# @router.get("/{item_id}")
-# async def read_item(item_id: str):
-#     if item_id not in fake_items_db:
-#         raise HTTPException(status_code=404, detail="Item not found")
-#     return {"name": fake_items_db[item_id]["name"], "item_id": item_id}

@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
 
-class StudentSchema(BaseModel):
+class UserCreateSchema(BaseModel):
   fullname: str = Field(...)
   email: EmailStr = Field(...)
   password: str = Field(...)
@@ -13,3 +14,9 @@ class StudentSchema(BaseModel):
         "password": "password9714912",
       }
     }
+
+class UserUpdateSchema(BaseModel):
+  fullname: Optional[str] = None  # Make fullname optional
+  email: Optional[str] = None  # Make email optional
+  password: Optional[str] = None  # Make password optional
+
