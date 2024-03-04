@@ -35,7 +35,7 @@ async def retrieve_users() -> List[UserRetrieveSchema]:
 
 # Read operation (Get user by ID)
 @router.get("/{user_id}", response_model=UserRetrieveSchema, status_code=status.HTTP_200_OK)
-async def read_item(user_id: PydanticObjectId):
+async def retrieve_user(user_id: PydanticObjectId):
   user = await UserDocument.find_one(UserDocument.id == user_id)
   if not user:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
