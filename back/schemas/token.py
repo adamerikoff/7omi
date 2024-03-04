@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class Token(BaseModel):
-  token_data: str
+  access_token: str
   token_type: str
 
 

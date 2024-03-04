@@ -1,12 +1,36 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 
-from jose import jwt
+from beanie import PydanticObjectId
+
+import jwt
+
+import time
 
 from back.schemas.user import UserSchema, UserInDBSchema, UserRetrieveSchema
 from back.schemas.token import Token, TokenData
 
+from back.models.user import UserDocument
+
+from back.config import pwd_context, ALGORITHM, SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
+
+def signJWT(username: str, id: PydanticObjectId) -> Token:
+  payload = {
+    "username": username,
+    "username": str(id),
+    "expires": time.time() + ACCESS_TOKEN_EXPIRE_MINUTES*60
+  }
+  token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+  return Token(access_token=token, token_type="Bearer")
 
 
+def decodeJWT(token: str) -> dict:
+  try:
+    decoded_token = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    return decoded_token if decoded_token["expires"] >= time.time() else None
+  except:
+    return {}
+    
 router = APIRouter(
   prefix="/auth",
   tags=["auth"],
@@ -14,23 +38,12 @@ router = APIRouter(
   # responses={404: {"description": "Not found"}},
 )
 
-# @router.post('/login')
-# def login(user: UserInDBSchema):
-#   if user.username != "test" or user.password != "test":
-#       raise HTTPException(status_code=401,detail="Bad username or password")
-#   token = jwt.encode({'key': 'value'}, 'secret', algorithm='HS256')
-#   return {"access_token": access_token, "refresh_token": refresh_token}
-
-# @router.post('/refresh')
-# def refresh(Authorize: AuthJWT = Depends()):
-#   """
-#   The jwt_refresh_token_required() function insures a valid refresh
-#   token is present in the request before running any code below that function.
-#   we can use the get_jwt_subject() function to get the subject of the refresh
-#   token, and use the create_access_token() function again to make a new access token
-#   """
-#   Authorize.jwt_refresh_token_required()
-
-#   current_user = Authorize.get_jwt_subject()
-#   new_access_token = Authorize.create_access_token(subject=current_user)
-#   return {"access_token": new_access_token}
+@router.post('/login', response_model=Token)
+async def auth_issue_token(user: OAuth2PasswordRequestForm = Depends()):
+  user_doc = await UserDocument.find_one(UserDocument.username == user.username)
+  # Check if the user exists and if the password is correct
+  if not user_doc or not pwd_context.verify(user.password, user_doc.hashed_password):
+    raise HTTPException(status_code=401, detail="Incorrect username or password")
+  token = signJWT(user_doc.username, user_doc.id)
+  # Generate and return the authentication token
+  return token
