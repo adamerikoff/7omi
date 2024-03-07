@@ -2,3 +2,5 @@ fastapi
 uvicorn
 motor
 beanie
+passlib
+bcrypt

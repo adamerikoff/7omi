@@ -3,7 +3,9 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from core.config import MONGO_URI, MONGO_DB_NAME
 
-document_model = []
+from core.documents.user import UserDocument
+
+document_model = [UserDocument]
 
 async def init_database():
     # Create Motor client
