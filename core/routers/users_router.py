@@ -18,7 +18,8 @@ async def retrieve_users():
 
 @router.get("/{user_id}")
 async def retrieve_user(user_id: str):
-    user: UserBase = None
+
+    #user: UserBase = get_user_by_username()
     return f"{user_id}"
 
 @router.post("/")
@@ -31,7 +32,7 @@ async def create_user(new_user: UserCreate):
         hashed_password=hashed_password
         )
     await UserDocument.insert(user_document_representation)
-    return user_document_representation
+    return UserBase(**user_document_representation.model_dump())
 
 @router.put("/")
 async def update_user():
