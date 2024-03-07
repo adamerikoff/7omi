@@ -23,7 +23,7 @@ async def retrieve_user(user_id: str):
 
 @router.post("/")
 async def create_user(new_user: UserCreate):
-    if not check_uniqueness(new_user.username):
+    if not await check_uniqueness(new_user.username):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Username already exist.")
     hashed_password = hash_password(new_user.password)
     user_document_representation = UserDocument(
