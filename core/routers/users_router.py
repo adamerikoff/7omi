@@ -1,7 +1,8 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Response
 
-from core.schemas.user import UserBase, UserCreate, UserDB
-from core.documents.user import UserDocument, check_uniqueness, hash_password, verify_password
+from core.schemas.user import UserBase, UserCreate, UserDB, UserUpdate
+from core.documents.user import UserDocument 
+from core.documents.user import check_uniqueness, hash_password, verify_password, get_user_by_username, get_users
 
 router = APIRouter(
     prefix="/users",
@@ -13,14 +14,18 @@ router = APIRouter(
 
 @router.get("/")
 async def retrieve_users():
-    users = []
-    return users
+    users = await get_users()
+    if not users:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Users not found.")
+    return [UserBase(**u.model_dump()) for u in users]
 
-@router.get("/{user_id}")
-async def retrieve_user(user_id: str):
-
-    #user: UserBase = get_user_by_username()
-    return f"{user_id}"
+@router.get("/{username}")
+async def retrieve_user(username: str):
+    user = await get_user_by_username(username)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+    return UserBase(**user.model_dump())
+    
 
 @router.post("/")
 async def create_user(new_user: UserCreate):
@@ -34,12 +39,27 @@ async def create_user(new_user: UserCreate):
     await UserDocument.insert(user_document_representation)
     return UserBase(**user_document_representation.model_dump())
 
-@router.put("/")
-async def update_user():
-    update_user = None
-    return update_user
+@router.put("/{username}")
+async def update_user(username: str, user_data: UserUpdate):
+    if user_data.password:
+        user_data.hashed_password = hash_password(user_data.password)
+    user_representation = UserDB(**user_data.model_dump())
 
-@router.delete("/{user_id}")
-async def delete_user(user_id: str):
+    # Retrieve the user to update
+    user_to_update = await get_user_by_username(username)
 
-    return f"deleted {user_id}"
+    if user_to_update is None:
+        raise HTTPException(status_code=404, detail="User not found.")
+    
+    user_to_update.__dict__.update(**user_representation.model_dump(exclude_unset=True))
+    await user_to_update.save()
+    return UserBase(**user_to_update.model_dump())
+
+@router.delete("/{username}")
+async def delete_user(username: str):
+    #check rights
+    user = await get_user_by_username(username)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found.")
+    await user.delete()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
