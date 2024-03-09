@@ -4,3 +4,5 @@ motor
 beanie
 passlib
 bcrypt
+python-jose
+python-multipart
