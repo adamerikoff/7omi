@@ -24,7 +24,7 @@ def create_acess_token(data: dict, expire_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def get_current_user(token: str = Depends(oauth2_scheme)) -> UserDocument:
     credential_exception = HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid credentials",
@@ -37,7 +37,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
             raise credential_exception
     except JWTError:
         raise credential_exception
-    user = get_user_by_username(username)
+    user: UserDocument = get_user_by_username(username)
     if user is None:
         raise credential_exception
     return user

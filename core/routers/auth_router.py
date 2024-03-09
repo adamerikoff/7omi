@@ -22,6 +22,7 @@ async def login(request: OAuth2PasswordRequestForm = Depends()):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Invalid credentials")
+    user = UserDB(**user.model_dump())
     if not verify_password(request.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
