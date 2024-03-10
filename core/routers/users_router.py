@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException, Response, Depends
 
 from core.schemas.user import UserBase, UserCreate, UserDB, UserUpdate
 from core.documents.user import UserDocument 
-from core.documents.user import check_uniqueness, hash_password, verify_password, get_user_by_username, get_users
+from core.services.users_service import user_exists, get_users
 from core.oauth2 import oauth2
 
 router = APIRouter(
@@ -28,9 +28,9 @@ async def retrieve_user(current_user: UserDB = Depends(oauth2.get_current_user))
 
 @router.post("/")
 async def create_user(new_user: UserCreate):
-    if not await check_uniqueness(new_user.username):
+    if await user_exists(new_user.username):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Username already exist.")
-    hashed_password = hash_password(new_user.password)
+    hashed_password = oauth2.hash_password(new_user.password)
     user_document_representation = UserDocument(
         username=new_user.username,
         hashed_password=hashed_password
@@ -41,7 +41,7 @@ async def create_user(new_user: UserCreate):
 @router.put("/me")
 async def update_user(user_data: UserUpdate, current_user: UserDB = Depends(oauth2.get_current_user)):
     if user_data.password:
-        user_data.hashed_password = hash_password(user_data.password)
+        user_data.hashed_password = oauth2.hash_password(user_data.password)
     user_representation = UserDB(**user_data.model_dump())
     # Retrieve the user to update
     user_to_update = await current_user

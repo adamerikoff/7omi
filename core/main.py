@@ -4,8 +4,7 @@ from fastapi import FastAPI
 
 from core.database import init_database
 
-from core.routers import users_router
-from core.routers import auth_router
+from core.routers import users_router, chats_router, auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,6 +19,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(users_router.router)
 app.include_router(auth_router.router)
+app.include_router(chats_router.router)
 
 @app.get("/")
 def root():
