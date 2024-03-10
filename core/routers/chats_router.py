@@ -50,7 +50,7 @@ async def chat_add_message(chat_name: str, content: str,  current_user: UserDB =
     return messages
 
 @router.get("/{chat_name}")
-async def chat_add_message(chat_name: str, current_user: UserDB = Depends(oauth2.get_current_user)):
+async def get_chat(chat_name: str, current_user: UserDB = Depends(oauth2.get_current_user)):
     if not await user_exists(current_user.username):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User doesn't exist.")
     if not await chat_exists(chat_name):
