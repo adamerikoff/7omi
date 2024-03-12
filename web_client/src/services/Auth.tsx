@@ -8,6 +8,10 @@ export const fetchToken = (): string | null => {
     return localStorage.getItem('access_token');
 };
 
+export const removeToken = (): void => {
+    localStorage.removeItem('access_token');
+}
+
 const RequireToken: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const auth = fetchToken();
     const location = useLocation();

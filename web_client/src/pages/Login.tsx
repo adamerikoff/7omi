@@ -26,11 +26,7 @@ function Login() {
       axios.post(url, form_data)
         .then(response => {
           const { access_token, username, token_type } = response.data; 
-          console.log(response.data)
           if(access_token){
-            console.log(access_token)
-            console.log(username)
-            console.log(token_type)
             setToken(access_token);
             navigate("/chat");
           }

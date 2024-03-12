@@ -9,6 +9,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Chat from './pages/Chat'
 
+import RequireToken from './services/Auth'
+
 import './App.css'
 
 function App() {
@@ -19,10 +21,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat" element={<RequireToken> <Chat /> </RequireToken>} />
       </Routes>
       <Footer/>
-    </BrowserRouter>    
+    </BrowserRouter> 
   )
 }
 

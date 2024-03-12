@@ -7,59 +7,7 @@ function Conversations() {
     {
       title: "Conversation 1",
       latestMessage: "Latest message in conversation 1",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 1",
-      latestMessage: "Latest message in conversation 1",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
-    {
-      title: "Conversation 2",
-      latestMessage: "Latest message in conversation 2",
-    },
+    }
   ];
 
   return (

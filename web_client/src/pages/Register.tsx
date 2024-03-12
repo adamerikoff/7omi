@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { Container, Paper, Typography, TextField, Button } from '@mui/material'
 
+import axios from 'axios';
+
 function Register() {
   const navigate = useNavigate();
   
@@ -14,7 +16,22 @@ function Register() {
     if ((username == "") && (password == "")) {
       return;
     } else {
-      console.log(username)
+      const url = "http://localhost:8000/users"
+
+      const new_user_data = {
+        username: username,
+        password: password
+      }
+
+      axios.post(url, new_user_data)
+        .then(response => {
+          if(response.data.username){
+            alert(`User: ${response.data.username} created`)
+          }
+        })
+        .catch(function (error) {
+          console.log(error, "error")
+        });
     }
   }
 
