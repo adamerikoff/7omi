@@ -6,6 +6,8 @@ require_relative "./db"
 require_relative "./workspace"
 require_relative "./entry"
 require_relative "./tree"
+require_relative "./author"
+require_relative "./commit"
 
 
 command = ARGV.shift
@@ -46,8 +48,24 @@ when "commit"
 
   tree = Tree.new(entries)
   database.store(tree)
-  puts "tree: #{ tree.oid }"
 
+  name = ENV.fetch("USER")
+  email = ENV.fetch("USER")
+  author = Author.new(name, email, Time.now)
+
+  puts "Enter commit message: "
+  message = $stdin.gets.chomp
+
+
+  commit = Commit.new(tree.oid, author, message)
+  database.store(commit)
+
+  File.open(ruvy_path.join("HEAD"), File::WRONLY | File::CREAT) do |file|
+    file.puts(commit.oid)
+  end
+
+  puts "[(root-commit) #{ commit.oid }] #{ message.lines.first }"
+  exit 0
 else
   $stderr.puts "ruvy: '#{ command }' is not a jit command."
   exit 1
