@@ -1,7 +1,8 @@
 class Commit
   attr_accessor :oid
 
-  def initialize(tree, author, message)
+  def initialize(parent, tree, author, message)
+    @parent = parent
     @tree = tree
     @author = author
     @message = message
@@ -15,6 +16,7 @@ class Commit
   def to_s
     lines = [
       "TREE: #{ @tree }",
+      "PARENT: #{ @parent.nil? ? "(root-commit) " : @parent }",
       "AUTHOR: #{ @author }",
       "COMMITER: #{ @author }",
       "",
