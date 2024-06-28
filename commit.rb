@@ -14,11 +14,11 @@ class Commit
 
   def to_s
     lines = [
-      "tree #{ @tree }",
-      "author #{ @author }",
-      "committer #{ @author }",
+      "TREE: #{ @tree }",
+      "AUTHOR: #{ @author }",
+      "COMMITER: #{ @author }",
       "",
-      @message
+      ["MESSAGE:", @message].join(" ")
     ]
 
     lines.join("\n")
