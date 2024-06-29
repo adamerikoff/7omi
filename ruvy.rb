@@ -49,8 +49,8 @@ when "commit"
     Entry.new(path, blob.oid, stat)
   end
 
-  tree = Tree.new(entries)
-  database.store(tree)
+  root = Tree.build(entries)
+  root.traverse { |tree| database.store(tree) }
 
   parent = refs.read_head
   name = ENV.fetch("USER")
@@ -61,7 +61,7 @@ when "commit"
   message = $stdin.gets.chomp
 
 
-  commit = Commit.new(parent, tree.oid, author, message)
+  commit = Commit.new(root.oid, parent, author, message)
   database.store(commit)
   refs.update_head(commit.oid)
 
