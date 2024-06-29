@@ -84,6 +84,8 @@ when "add"
   database = Database.new(db_path)
   index = Index.new(index_path)
 
+  index.load_for_update
+
   ARGV.each do |path_input|
     path = Pathname.new(File.expand_path(path_input))
 

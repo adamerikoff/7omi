@@ -12,6 +12,7 @@ class Index
     @entries = {}
     @keys = SortedSet.new
     @lockfile = Lockfile.new(pathname)
+    clear
     end
 
     def add(pathname, oid, stat)
@@ -30,6 +31,41 @@ class Index
     finish_write
 
     true
+  end
+
+  def load_for_update
+    if @lockfile.hold_for_update
+      load
+      true
+    else
+      false
+    end
+  end
+
+  def load
+    clear
+    file = open_index_file
+
+    if file
+      reader = Checksum.new(file)
+      count = read_header(reader)
+      read_entries(reader, count)
+      reader.verify_checksum
+    end
+  ensure
+    file&.close
+  end
+
+  def clear
+    @entries = {}
+    @keys = SortedSet.new
+    @changed = false
+  end
+
+  def open_index_file
+    File.open(@pathname, File::RDONLY)
+  rescue Errno::ENOENT
+    nil
   end
 
   private
