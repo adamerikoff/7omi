@@ -1,6 +1,7 @@
 require "digest/sha1"
 require "zlib"
-require_relative "./blob"
+
+require_relative "./database/blob"
 
 class Database
 

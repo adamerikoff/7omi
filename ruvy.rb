@@ -1,20 +1,22 @@
 require "fileutils"
 require "pathname"
 
-require_relative "./blob"
-require_relative "./db"
-require_relative "./workspace"
-require_relative "./entry"
-require_relative "./tree"
-require_relative "./author"
-require_relative "./commit"
-require_relative "./refs"
+require_relative "./lib/database/blob"
+require_relative "./lib/database/tree"
+require_relative "./lib/database/author"
+require_relative "./lib/database/commit"
 
+require_relative "./lib/db"
+require_relative "./lib/workspace"
+require_relative "./lib/entry"
+require_relative "./lib/refs"
+require_relative './lib/index'
 
 command = ARGV.shift
 
 case command
 when "init"
+
   path = ARGV.fetch(0, Dir.getwd)
   root_path = Pathname.new(File.expand_path(path))
   ruvy_path = root_path.join(".ruvy")
@@ -30,7 +32,9 @@ when "init"
 
   puts "Initialized empty RUVY repository in #{ ruvy_path }"
   exit 0
+
 when "commit"
+
   root_path = Pathname.new(Dir.getwd)
   ruvy_path = root_path.join(".ruvy")
   db_path = ruvy_path.join("objects")
@@ -67,6 +71,33 @@ when "commit"
 
   is_root = parent.nil? ? "(root-commit) " : ""
   puts "[#{ is_root }#{ commit.oid }] #{ message.lines.first }"
+  exit 0
+
+when "add"
+
+  root_path = Pathname.new(Dir.getwd)
+  ruvy_path = root_path.join(".ruvy")
+  db_path = ruvy_path.join("objects")
+  index_path = ruvy_path.join("index")
+
+  workspace = Workspace.new(root_path)
+  database = Database.new(db_path)
+  index = Index.new(index_path)
+
+  ARGV.each do |path_input|
+    path = Pathname.new(File.expand_path(path_input))
+
+    workspace.list_files(path).each do |pathname|
+      data = workspace.read_file(pathname)
+      stat = workspace.stat_file(pathname)
+
+      blob = Database::Blob.new(data)
+      database.store(blob)
+      index.add(pathname, blob.oid, stat)
+    end
+  end
+
+  index.write_updates
   exit 0
 else
   $stderr.puts "ruvy: '#{ command }' is not a jit command."

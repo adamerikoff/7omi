@@ -1,4 +1,4 @@
-require_relative "./entry"
+require_relative "../entry"
 
 class Tree
   ENTRY_FORMAT = "Z*H40"

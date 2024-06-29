@@ -1,9 +1,9 @@
 class Commit
   attr_accessor :oid
 
-  def initialize(parent, tree, author, message)
-    @parent = parent
+  def initialize(tree, parent, author, message)
     @tree = tree
+    @parent = parent
     @author = author
     @message = message
   end
